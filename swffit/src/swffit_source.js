@@ -1,5 +1,5 @@
 /**
-*	swffit v2.0 (10/18/2008) <http://swffit.millermedeiros.com/>
+*	swffit v2.1 (01/18/2009) <http://swffit.millermedeiros.com/>
 *	Copyright (c) 2008 Miller Medeiros <http://www.millermedeiros.com/>
 *	This software is released under the MIT License <http://www.opensource.org/licenses/mit-license.php>
 *
@@ -10,82 +10,113 @@
 <!-- //2008 - MILLERMEDEIROS.COM
 var swffit = function(){
 	var NS = (navigator.appName=='Netscape')? true : false,
+		WK = (navigator.userAgent.indexOf("WebKit") > 0)? true : false,
+		UNDEF = "undefined",
 		win = window,
 		doc = document,
 		html = doc.getElementsByTagName('html')[0],
 		_ft,
+		_re,
+		_t,
 		_mw,
 		_mh,
 		_xw,
 		_xh,
 		_hc,
 		_vc;
+	swfobject.createCSS("object", "position:absolute");
 	/**
 	* Set the object that will be resized and configure the desired size
-	* @param	t	Target (flash id)
-	* @param	w	Minimum Width (Number)
-	* @param	h	Minimum Height (Number)
-	* @param	xw	Maximum Width (Number or null) : Optional
-	* @param	xh	Maximum Height (Number or null) : Optional
-	* @param	hc	Horizontal Centered (Boolean: true or false - Default value is true) : Optional
-	* @param	vc	Vertical Centered (Boolean: true or false - Default value is true) : Optional
+	* @param	t	Flash ID : String
+	* @param	mw	Minimum Width : Number
+	* @param	mh	Minimum Height : Number
+	* @param	xw	Maximum Width : Number (Optional - Default value is null)
+	* @param	xh	Maximum Height : Number (Optional - Default value is null)
+	* @param	hc	Horizontal Centered : Boolean (Optional - Default value is true)
+	* @param	vc	Vertical Centered : Boolean (Optional - Default value is true)
 	*/
-	function fit(t, w, h, xw, xh, hc, vc){
-		_ft = t;
-		_mw = w;
-		_mh = h;
-		_xw = xw;
-		_xh = xh;
-		_hc = (hc || hc == null)? true : false;
-		_vc = (vc || vc == null)? true : false;
-		swfobject.createCSS("#"+_ft, "position:absolute; width:100%; height:100%");
-		swfobject.createCSS("#"+_ft+" object", "position:absolute");
-		swfobject.addDomLoadEvent(startFit);
+	function fit(t, mw, mh, xw, xh, hc, vc){
+		var xw = (xw)? xw : null,
+			xh = (xh)? xh : null,
+			hc = (hc || hc == null)? true : false,
+			vc = (vc || vc == null)? true : false;
+		configure({target: t, minWid: mw, minHei: mh, maxWid: xw, maxHei: xh, hCenter: hc, vCenter: vc});
+	}
+	/**
+	* Configure the desired properties values (you can change as many properties as you want at the same time)
+	* @param	o	Object containing the desired properties that needs to be changed { target, minWid, minHei, maxWid, maxHei, hCenter, vCenter }
+	*	Properties:
+	*		target	Flash ID : String
+	*		minWid	Minimum Width : Number
+	*		minHei	Minimum Height : Number
+	*		maxWid	Maximum Width : Number
+	*		maxHei	Maximum Height : Number
+	*		hCenter	Horizontal Centered : Boolean
+	*		vCenter	Vertical Centered : Boolean
+	* @example	configure({target: 'my_flash', minWid: 800, minHei:400, maxWid: 1200, maxHei: 600, hCenter: true, vCenter: true});
+	*/
+	function configure(o){
+		_mw = (o.minWid)? o.minWid : _mw;
+		_mh = (o.minHei)? o.minHei : _mh;
+		_xw = (typeof o.maxWid != UNDEF)? o.maxWid : _xw;
+		_xh = (typeof o.maxHei != UNDEF)? o.maxHei : _xh;
+		_hc = (o.hCenter || (_hc == true && o.hCenter == null))? true : false;
+		_vc = (o.vCenter || (_vc == true && o.vCenter == null))? true : false;
+		if (o.target && (o.target != _t)){
+			_t = o.target;
+			swfobject.addDomLoadEvent(initFit);
+		} else {
+			startFit();
+		}
 	}
 	/** 
 	* Set the initial parameters 
+	* @private
 	*/
-	function startFit(){
+	function initFit(){
 		html.style.height = doc.body.style.height = '100%';
 		html.style.overflow = 'auto';
 		doc.body.style.margin = doc.body.style.padding = '0';
-		if (swfobject.getObjectById(_ft)){
-			_ft = swfobject.getObjectById(_ft);
+		swfobject.createCSS("#"+_t, "width:100%; height:100%");
+		if (swfobject.getObjectById(_t)){
+			_ft = swfobject.getObjectById(_t);
 		} else if(NS){
-			_ft = doc.getElementById(_ft).getElementsByTagName('object')[0];
+			_ft = doc.getElementById(_t).getElementsByTagName('object')[0];
 		} else {
-			_ft = doc.getElementById(_ft);
+			_ft = doc.getElementById(_t);
 		}
-		addResizeEvent(resize);
-		swfobject.addDomLoadEvent(resize);
+		startFit();
 	}
 	/**
-	* Stop fitting the swf
+	* Start fitting the flash movie
+	*/
+	function startFit(){
+		setSize();
+		if(!_re){
+			addResizeEvent(setSize);
+			_re = 1;
+		}
+	}
+	/**
+	* Stop fitting the flash movie
 	* @param	w	Width (Number or % or null - Default value is '100%') : Optional
 	* @param	h	Height (Number or % or null - Default value is '100%') : Optional
 	*/
 	function stopFit(w,h){
-		removeResizeEvent(resize);
-		_ft.style.top = _ft.style.left = 'auto';
-		_ft.style.marginTop = _ft.style.marginLeft = '0';
-		var w = (w == null)? '100%' : w,
-			h = (h == null)? '100%' : h;
-		setWidth(w);
-		setHeight(h);
-	}
-	/**
-	* Sets the width of the swf
-	* @param	w	Width (Number or %)
-	*/
-	function setWidth(w){
-		_ft.style.width = (isNaN(w))? w : w+"px";
-	}
-	/**
-	* Sets the height of the swf
-	* @param	h	Height (Number or %)
-	*/
-	function setHeight(h){
-		_ft.style.height = (isNaN(h))? h : h+"px";
+		if(_re){
+			removeResizeEvent(setSize);
+			_re = 0;
+			_ft.style.top = _ft.style.left = 'auto';
+			_ft.style.marginTop = _ft.style.marginLeft = '0';
+			var w = (w == null)? '100%' : w,
+				h = (h == null)? '100%' : h;
+			setWidth(w);
+			setHeight(h);
+			//Verifies if is a WebKit browser (Safari, Google Chrome) and force redraw
+			if(WK){
+				html.focus();
+			}
+		}
 	}
 	/**
 	* Add onresize event  ( Based on Peter-Paul Koch solution: http://www.quirksmode.org/js/eventSimple.html )
@@ -110,56 +141,102 @@ var swffit = function(){
 		}
 	}
 	/**
-	* Resizes and Reposition the flash movie
+	* Sets the width of the swf
+	* @param	w	Width (Number or %)
+	* @private
 	*/
-	function resize(){
+	function setWidth(w){
+		_ft.style.width = (isNaN(w))? w : w+"px";
+	}
+	/**
+	* Sets the height of the swf
+	* @param	h	Height (Number or %)
+	* @private
+	*/
+	function setHeight(h){
+		_ft.style.height = (isNaN(h))? h : h+"px";
+	}
+	/**
+	* Update the flash movie size
+	* @private
+	*/
+	function setSize(){
 		var iw = (NS)? win.innerWidth : doc.body.clientWidth, 
 			ih = (NS)? win.innerHeight : doc.body.clientHeight;
-		//sets width and center horizontally
-		if (iw > _xw && _xw){
+		//sets width
+		if (_xw && iw >= _xw){
 			setWidth(_xw);
-			if(_hc){
-				_ft.style.left = '50%';
-				_ft.style.marginLeft = -(_xw*.5)+'px';
-			}
+			setPosition(0,1);
 		} else {
 			if (iw > _mw && (iw < _xw || !_xw)) {
 				setWidth('100%');
 			} else {
 				setWidth(_mw);
 			}
-			if(_hc){
-				_ft.style.left = 'auto';
-				_ft.style.marginLeft = '0';
-			}
+			setPosition(0,0);
 		}
-		// sets height and center vertically
-		if (ih > _xh && _xh){
+		// sets height
+		if (_xh && ih >= _xh){
 			setHeight(_xh);
-			if(_vc){
-				_ft.style.top = '50%';
-				_ft.style.marginTop = -(_xh*.5)+'px';
-			}
+			setPosition(1,1);
 		}else{
 			if (ih > _mh && (ih < _xh || !_xh)){
 				setHeight('100%');
 			} else {
 				setHeight(_mh);
 			}
-			if(_vc){
+			setPosition(1,0);
+		}
+		//Verifies if is a WebKit browser (Safari, Google Chrome) and force redraw
+		if(WK){
+			html.focus();
+		}
+	}
+	/**
+	* Update the flash movie position
+	* @param	t	Top (boolean)
+	* @param	m	Reached the Max Size (boolean)
+	* @private
+	*/
+	function setPosition(t, m){
+		if(t){
+			if(m && _vc){
+				_ft.style.top = '50%';
+				_ft.style.marginTop = -(_xh*.5)+'px';
+			}else{
 				_ft.style.top = 'auto';
 				_ft.style.marginTop = '0';
+			}
+		}else{
+			if(m && _hc){
+				_ft.style.left = '50%';
+				_ft.style.marginLeft = -(_xw*.5)+'px';
+			}else{
+				_ft.style.left = 'auto';
+				_ft.style.marginLeft = '0';
 			}
 		}
 	}
 	/**
-	* Public API
+	* Return the value of the desired property
+	* @param	p	Desired Property : String
+	* @return	Desired Property Value : String / Number / Boolean
+	*/
+	function getValueOf(p){
+		var o = {target:_t, minWid:_mw, minHei:_mh, maxWid:_xw, maxHei:_xh, hCenter:_hc, vCenter:_vc};
+		return o[p];
+	}
+	/**
+	* PUBLIC API
 	*/
 	return{
+		fit: fit,
+		configure: configure,
+		startFit: startFit,
+		stopFit: stopFit,
 		addResizeEvent: addResizeEvent,
 		removeResizeEvent: removeResizeEvent,
-		stopFit: stopFit,
-		fit: fit
+		getValueOf: getValueOf
 	};
 }();
 //-->
