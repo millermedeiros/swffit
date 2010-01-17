@@ -1,5 +1,5 @@
 /**
-*	swffit v2.3.2 (09/11/2009) <http://swffit.millermedeiros.com/>
+*	swffit v2.3.3 (11/11/2009) <http://swffit.millermedeiros.com/>
 *	Copyright (c) 2009 Miller Medeiros <http://www.millermedeiros.com/>
 *	This software is released under the MIT License <http://www.opensource.org/licenses/mit-license.php>
 *
@@ -28,12 +28,12 @@ var swffit = function(){
 		_vc,
 		_ow,
 		_oh;
-	swfobject.createCSS("object", "position:absolute");
+	swfobject.createCSS('object', 'position:absolute; outline:none'); //outiline none fixes bug on FF3.6b
 	/**
 	* Set the object that will be resized and configure the desired size
 	* @param {String} t Flash ID
-	* @param {Number} [mw] Minimum Width (Optional - Default value is the size used on swfobject)
-	* @param {Number} [mh] Minimum Height (Optional - Default value is the size used on swfobject)
+	* @param {Number} [mw] Minimum Width (Optional - Default value is the flash object width)
+	* @param {Number} [mh] Minimum Height (Optional - Default value is the flash object height)
 	* @param {Number} [xw] Maximum Width (Optional - Default value is null)
 	* @param {Number} [xh] Maximum Height (Optional - Default value is null)
 	* @param {Boolean} [hc] Horizontal Centered (Optional - Default value is true)
@@ -62,18 +62,17 @@ var swffit = function(){
 	* @example configure({target: 'my_flash', minWid: 800, minHei:400, maxWid: 1000, maxHei: 550, hCenter: true, vCenter: false});
 	*/
 	function configure(o){
-		//checks if value changed and return correct value {Number} 
+		//checks if value changed and return correct value
 		var evalNum = function(v, p){
-			return (typeof o[p] != UNDEF)? o[p] : v;
-		};
+				return (typeof o[p] != UNDEF)? o[p] : v;
+			},
+			evalBool = function(v, p){
+				return (o[p] || (v && typeof o[p] == UNDEF));
+			};
 		_mw = evalNum(_mw, 'minWid');
 		_mh = evalNum(_mh, 'minHei');
 		_xw = evalNum(_xw, 'maxWid');
 		_xh = evalNum(_xh, 'maxHei');
-		//checks if value changed and return correct value {Boolean}
-		var evalBool = function(v, p){
-			return (o[p] || (v && typeof o[p] == UNDEF));
-		};
 		_hc = evalBool(_hc, 'hCenter');
 		_vc = evalBool(_vc, 'vCenter');
 		if (o.target && (o.target != _t)){
@@ -187,8 +186,8 @@ var swffit = function(){
 	* @private
 	*/
 	function setSize(){
-		var iw = (win.innerWidth)? win.innerWidth : doc.body.clientWidth,
-			ih = (win.innerHeight)? win.innerHeight : doc.body.clientHeight;
+		var iw = (win.innerWidth)? win.innerWidth : ((doc.documentElement.clientWidth)? doc.documentElement.clientWidth : doc.body.clientWidth),
+			ih = (win.innerHeight)? win.innerHeight : ((doc.documentElement.clientHeight)? doc.documentElement.clientHeight : doc.body.clientHeight);
 		//fix window innerSize difference when scrollbar is visible
 		iw -= (!IE && ih <= _mh)? 18 : 0;
 		ih -= (!IE && iw <= _mw)? 18 : 0;
