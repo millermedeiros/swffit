@@ -1,3 +1,7 @@
+== swffit 2.3.2 (09/11/2009) ==
+
+  * small code optimizations
+
 == swffit 2.3.1 (08/05/2009) ==
 
   * fixed conflict between swffit and FF3.5

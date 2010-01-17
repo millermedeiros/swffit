@@ -1,5 +1,5 @@
 /**
-*	swffit v2.3.1 (08/05/2009) <http://swffit.millermedeiros.com/>
+*	swffit v2.3.2 (09/11/2009) <http://swffit.millermedeiros.com/>
 *	Copyright (c) 2009 Miller Medeiros <http://www.millermedeiros.com/>
 *	This software is released under the MIT License <http://www.opensource.org/licenses/mit-license.php>
 *
@@ -8,7 +8,6 @@
 *
 *	@requires swfobject 2.1 or higher <http://code.google.com/p/swfobject>
 */
-<!-- //2009 - MILLERMEDEIROS.COM
 var swffit = function(){
 	var win = window,
 		doc = document,
@@ -41,12 +40,12 @@ var swffit = function(){
 	* @param {Boolean} [vc] Vertical Centered (Optional - Default value is true)
 	*/
 	function fit(t, mw, mh, xw, xh, hc, vc){
-		var mw = (mw)? mw : _ow,
-			mh = (mh)? mh : _oh,
-			xw = (xw)? xw : null,
-			xh = (xh)? xh : null,
-			hc = (hc || hc == null),
-			vc = (vc || vc == null);
+		mw = mw || _ow;
+		mh = mh || _oh;
+		xw = xw || null;
+		xh = xh || null;
+		hc = (hc || hc == null);
+		vc = (vc || vc == null);
 		configure({target: t, minWid: mw, minHei: mh, maxWid: xw, maxHei: xh, hCenter: hc, vCenter: vc});
 	}
 	/**
@@ -66,7 +65,7 @@ var swffit = function(){
 		//checks if value changed and return correct value {Number} 
 		var evalNum = function(v, p){
 			return (typeof o[p] != UNDEF)? o[p] : v;
-		}
+		};
 		_mw = evalNum(_mw, 'minWid');
 		_mh = evalNum(_mh, 'minHei');
 		_xw = evalNum(_xw, 'maxWid');
@@ -74,13 +73,13 @@ var swffit = function(){
 		//checks if value changed and return correct value {Boolean}
 		var evalBool = function(v, p){
 			return (o[p] || (v && typeof o[p] == UNDEF));
-		}
+		};
 		_hc = evalBool(_hc, 'hCenter');
 		_vc = evalBool(_vc, 'vCenter');
 		if (o.target && (o.target != _t)){
 			_t = o.target;
 			swfobject.addDomLoadEvent(initFit);
-			if(IE) swfobject.addLoadEvent(initFit); //fix conflict with swfaddress 2.3 and IE8 (in some browser modes)
+			if(IE){ swfobject.addLoadEvent(initFit); } //fix conflict with swfaddress 2.3 and IE8 (in some browser modes)
 		} else {
 			startFit();
 		}
@@ -90,8 +89,8 @@ var swffit = function(){
 	* @private
 	*/
 	function initFit(){
-		if(!html.style.overflowX) controlScroll(0,0);
-		if(!html.style.overflowY) controlScroll(0,1);
+		if(!html.style.overflowX){ controlScroll(0,0); }
+		if(!html.style.overflowY){ controlScroll(0,1); }
 		html.style.height = doc.body.style.height = '100%';
 		doc.body.style.margin = doc.body.style.padding = 0;
 		var st = 'width:100%; height:100%';
@@ -101,8 +100,8 @@ var swffit = function(){
 		_ft = (_ft != UNDEF && FF && /object/.test(_ft.innerHTML))? doc.getElementById(_t).getElementsByTagName('object')[0] : _ft; //required for static publishing on Firefox
 		_ow = _ft.width;
 		_oh = _ft.height;
-		_mw = (_mw)? _mw : _ow;
-		_mh = (_mh)? _mh : _oh;
+		_mw = _mw || _ow;
+		_mh = _mh || _oh;
 		startFit();
 	}
 	/**
@@ -128,8 +127,8 @@ var swffit = function(){
 			setStyle('left', 'auto');
 			setStyle('marginTop', 0);
 			setStyle('marginLeft', 0);
-			var w = (w)? w : '100%',
-				h = (h )? h : '100%';
+			w = w || '100%';
+			h = h || '100%';
 			setWidth(w);
 			setHeight(h);
 			forceRedraw();
@@ -140,7 +139,7 @@ var swffit = function(){
 	 * @private
 	 */
 	function forceRedraw(){
-		if(WK) html.focus();
+		if(WK){ html.focus(); }
 	}
 	/**
 	 * Add/Remove resize event listeners (Based on Peter-Paul Koch solution: http://www.quirksmode.org/js/eventSimple.html)
@@ -230,12 +229,12 @@ var swffit = function(){
 			m;
 		if(t){
 			p = (x && _vc)? '50%' : 'auto';
-			m = (x && _vc)? -(_xh*.5)+'px' : 0;
+			m = (x && _vc)? -(_xh*0.5)+'px' : 0;
 			setStyle('top', p);
 			setStyle('marginTop', m);
 		}else{
 			p = (x && _hc)? '50%' : 'auto';
-			m = (x && _hc)? -(_xw*.5)+'px' : 0;
+			m = (x && _hc)? -(_xw*0.5)+'px' : 0;
 			setStyle('left', p);
 			setStyle('marginLeft', m);
 		}
@@ -283,4 +282,3 @@ var swffit = function(){
 		}
 	};
 }();
-//-->
