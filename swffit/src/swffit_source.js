@@ -1,20 +1,22 @@
 /**
-*	swffit v2.1 (01/18/2009) <http://swffit.millermedeiros.com/>
-*	Copyright (c) 2008 Miller Medeiros <http://www.millermedeiros.com/>
+*	swffit v2.2 (05/12/2009) <http://swffit.millermedeiros.com/>
+*	Copyright (c) 2009 Miller Medeiros <http://www.millermedeiros.com/>
 *	This software is released under the MIT License <http://www.opensource.org/licenses/mit-license.php>
 *
 * 	swffit is used to resize flash to 100% wid/hei when the browser window is greater than the swf
 *	minimum size and to resize swf to the minimum size when browser window is smaller than the minimum size.
 *
 */
-<!-- //2008 - MILLERMEDEIROS.COM
+<!-- //2009 - MILLERMEDEIROS.COM
 var swffit = function(){
-	var NS = (navigator.appName=='Netscape')? true : false,
-		WK = (navigator.userAgent.indexOf("WebKit") > 0)? true : false,
-		UNDEF = "undefined",
-		win = window,
+	var win = window,
 		doc = document,
-		html = doc.getElementsByTagName('html')[0],
+		html = doc.getElementsByTagName('html')[0], 
+		_agent = navigator.userAgent.toLowerCase(),
+		NS = navigator.appName == 'Netscape',
+		WK = /webkit/.test(_agent),
+		IE = /msie/.test(_agent) && !win.opera,
+		UNDEF = "undefined",
 		_ft,
 		_re,
 		_t,
@@ -77,11 +79,13 @@ var swffit = function(){
 		html.style.height = doc.body.style.height = '100%';
 		html.style.overflow = 'auto';
 		doc.body.style.margin = doc.body.style.padding = '0';
-		swfobject.createCSS("#"+_t, "width:100%; height:100%");
+		var st = 'width:100%; height:100%';
+		st += (IE)? '; overflow:hidden' : ''; //fix IE8 and bugs FF mac
+		swfobject.createCSS("#"+_t, st);
 		if (swfobject.getObjectById(_t)){
 			_ft = swfobject.getObjectById(_t);
 		} else if(NS){
-			_ft = doc.getElementById(_t).getElementsByTagName('object')[0];
+			_ft = doc.getElementById(_t).getElementsByTagName('object')[0]; //required for static publishing (FF mac)
 		} else {
 			_ft = doc.getElementById(_t);
 		}
@@ -112,7 +116,7 @@ var swffit = function(){
 				h = (h == null)? '100%' : h;
 			setWidth(w);
 			setHeight(h);
-			//Verifies if is a WebKit browser (Safari, Google Chrome) and force redraw
+			//Force redraw (Safari, Google Chrome)
 			if(WK){
 				html.focus();
 			}
@@ -163,6 +167,10 @@ var swffit = function(){
 	function setSize(){
 		var iw = (NS)? win.innerWidth : doc.body.clientWidth, 
 			ih = (NS)? win.innerHeight : doc.body.clientHeight;
+		//fix conflict with swfaddress 2.3 and IE8
+		if(IE){
+			_ft = swfobject.getObjectById(_t);
+		}
 		//sets width
 		if (_xw && iw >= _xw){
 			setWidth(_xw);
@@ -187,7 +195,7 @@ var swffit = function(){
 			}
 			setPosition(1,0);
 		}
-		//Verifies if is a WebKit browser (Safari, Google Chrome) and force redraw
+		//Force redraw (Safari, Google Chrome)
 		if(WK){
 			html.focus();
 		}
