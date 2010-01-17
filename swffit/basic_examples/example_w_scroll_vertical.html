@@ -7,6 +7,7 @@
 		<script type="text/javascript" src="swfobject.js"></script>
 		<script type="text/javascript" src="swffit.js"></script>
 		<script type="text/javascript">
+			swffit.showScrollV(); //Should always be called before swfobject or it will make the flash to reload
 			swfobject.embedSWF("example.swf", "my_flash", "550", "400", "8.0.0");
 			swffit.fit("my_flash"); //Since v2.3 swffit use the same size of swfobject by default (but you can set a new size if you want)
 		</script>

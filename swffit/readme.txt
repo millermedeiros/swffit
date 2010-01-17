@@ -1,6 +1,6 @@
 ---------------------------------------------------------------------
-//      README SWFFIT v2.1 (http://swffit.millermedeiros.com)      //
-//   swffit is (c) 2008 Miller Medeiros (www.millermedeiros.com)   //
+//      README SWFFIT v2.3 (http://swffit.millermedeiros.com)      //
+//   swffit is (c) 2009 Miller Medeiros (www.millermedeiros.com)   //
 ---------------------------------------------------------------------
 
 
@@ -48,8 +48,8 @@ Set the object that will be resized and configure the desired size and parameter
 swffit.fit ("flashID", minWidth, minHeight, maxWidth:optional, maxHeight:optional, horizontalCentered:optional, verticalCentered:optional);
 --
 flashID:String - The ID of the flash movie.
-minWidth:Number - Minimum desired width (px) for your flash.
-minHeight:Number - Minimum desired height (px) for your flash.
+minWidth:Number (optional) - Minimum desired width (px) for your flash, default value is the size used on swfobject.
+minHeight:Number (optional) - Minimum desired height (px) for your flash, default value is the size used on swfobject.
 maxWidth:Number (optional) - Maximum desired width (px) or 'null'.
 maxHeight:Number (optional) - Maximum desired height (px) or 'null'.
 horizontalCentered:Boolean (optional) - sets if the flash is centered horizontally after reach max size, default value is true (boolean: true or false).
@@ -112,6 +112,26 @@ Remove onresize event.
 swffit.removeResizeEvent(function);
 --
 function:Function - Function that will be removed from the onresize event queue.
+
+
+
+/*** swffit.showScrollH ***/
+
+Show horizontal scroll
+--
+swffit.showScrollH();
+--
+obs: Should always be called befor swfobject.embedSWF();
+
+
+
+/*** swffit.showScrollV ***/
+
+Show vertical scroll
+--
+swffit.showScrollV();
+--
+obs: Should always be called befor swfobject.embedSWF();
 
 
 

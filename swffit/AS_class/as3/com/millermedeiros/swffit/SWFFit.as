@@ -1,6 +1,6 @@
 ﻿/**
- * SWFFit AS3 Class v1.1 (01/17/2008) <http://swffit.millermedeiros.com/>
- * requires swffit v2.1 javascript file to work
+ * SWFFit AS3 Class v1.2 (06/15/2008) <http://swffit.millermedeiros.com/>
+ * requires swffit v2.1 or greater to work
  * 
  * Copyright (c) 2008 Miller Medeiros <http://www.millermedeiros.com/>
  * Based on "SWFFit External Interface" class by Iwan Negro <http://www.hinderlingvolkart.com/>
@@ -25,16 +25,23 @@ package com.millermedeiros.swffit {
 		private static var _dispatcher:EventDispatcher = new EventDispatcher();
 		
 		/**
+		 * Constructor (Static class)
+		 */
+		public function SWFFit() {
+			throw Error('this is a static class and should not be instantiated.');
+		}
+		
+		/**
 		* Set the object that will be resized and configure the desired size
 		* @param	t	Flash ID
-		* @param	mw	Minimum Width
-		* @param	mh	Minimum Height
+		* @param	mw	Minimum Width (after version 2.3 default value is the same value used by the swfobject)
+		* @param	mh	Minimum Height (after version 2.3 default value is the same value used by the swfobject)
 		* @param	xw	Maximum Width
 		* @param	xh	Maximum Height
 		* @param	hc	Horizontal Centered
 		* @param	vc	Vertical Centered
 		*/
-		public static function fit(t:String, mw:int, mh:int, xw:int = undefined, xh:int = undefined, hc:Boolean = true, vc:Boolean = true):void {
+		public static function fit(t:String, mw:int = undefined, mh:int = undefined, xw:int = undefined, xh:int = undefined, hc:Boolean = true, vc:Boolean = true):void {
 			ExternalInterface.call("swffit.fit", t, mw, mh , xw, xh, hc, vc);
 			dispatch(SWFFitEvent.CHANGE);
 		}
@@ -62,8 +69,8 @@ package com.millermedeiros.swffit {
 		
 		/**
 		* Stop fitting the flash movie
-		* @param	w	Width (Number or % or null - Default value is '100%').
-		* @param	h	Height (Number or % or null - Default value is '100%').
+		* @param	w	Width (Number or % or null).
+		* @param	h	Height (Number or % or null).
 		*/
 		public static function stopFit(w:* = '100%', h:* = '100%'):void {
 			ExternalInterface.call("swffit.stopFit", w, h);
@@ -159,99 +166,71 @@ package com.millermedeiros.swffit {
 		//================ SET and GET Methods ====================//
 		
 		/**
-		 * Set the target flash movie ID
+		 * Target flash movie ID
 		 */
 		public static function set target(t:String):void {
 			configure({ target: t });
 		}
-		
-		/**
-		 * Get the target flash movie ID
-		 */
 		public static function get target():String {
 			return getValueOf("target");
 		}
 		
 		/**
-		 * Set the flash movie minimum width
+		 * Flash movie minimum width
 		 */
 		public static function set minWid(w:int):void {
 			configure({ minWid: w });
 		}
-		
-		/**
-		 * Get the flash movie minimum width
-		 */
 		public static function get minWid():int {			
 			return getValueOf("minWid");
 		}
 		
 		/**
-		 * Set the flash movie minimum height
+		 * Flash movie minimum height
 		 */
 		public static function set minHei(h:int):void {
 			configure({ minHei: h });
 		}
-		
-		/**
-		 * Get the flash movie minimum height
-		 */
 		public static function get minHei():int {
 			return getValueOf("minHei");
 		}
 		
 		/**
-		 * Set the flash movie maximum width
+		 * Flash movie maximum width
 		 */
 		public static function set maxWid(w:int):void {
 			configure({ maxWid: w });
 		}
-		
-		/**
-		 * Get the flash movie maximum width
-		 */
 		public static function get maxWid():int {
 			return getValueOf("maxWid");
 		}
 		
 		/**
-		 * Set the flash movie maximum height
+		 * Flash movie maximum height
 		 */
 		public static function set maxHei(h:int):void {
 			configure({ maxHei: h });
 		}
-		
-		/**
-		 * Get the flash movie maximum height
-		 */
 		public static function get maxHei():int {
 			return getValueOf("maxHei");
 		}
 		
 		/**
-		 * Set if the flash movie will be horizontal centered after reach the maximum size
+		 * Horizontal center flash movie after reach the maximum size
 		 */
 		public static function set hCenter(c:Boolean):void {
 			configure({ hCenter: c });
 		}
-		
-		/**
-		 * Get if the flash movie will be horizontal centered after reach the maximum size
-		 */
 		public static function get hCenter():Boolean {
 			return getValueOf("hCenter");
 		}
 		
 		/**
-		 * Set if the flash movie will be vertical centered after reach the maximum size
+		 * Vertical center flash movie after reach the maximum size
 		 */
 		public static function set vCenter(c:Boolean):void {
 			configure({ vCenter: c });
 		}
-		
-		/**
-		 * Get if the flash movie will be vertical centered after reach the maximum size
-		 */
 		public static function get vCenter():Boolean {
 			return getValueOf("vCenter");
 		}

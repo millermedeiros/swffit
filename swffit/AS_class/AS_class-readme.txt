@@ -1,5 +1,5 @@
 ----------------------------------------------------------------------
-//  README SWFFIT AS Class v1.1 (http://swffit.millermedeiros.com)  //
+//  README SWFFIT AS Class v1.2 (http://swffit.millermedeiros.com)  //
 //   swffit is (c) 2008 Miller Medeiros (www.millermedeiros.com)    //
 ----------------------------------------------------------------------
 
@@ -20,8 +20,8 @@ Set the object that will be resized and configure the desired size and parameter
 SWFFIT.fit ("flashID", minWidth, minHeight, maxWidth:optional, maxHeight:optional, horizontalCentered:optional, verticalCentered:optional);
 --
 flashID:String - The ID of the flash movie.
-minWidth:Number - Minimum desired width (px) for your flash.
-minHeight:Number - Minimum desired height (px) for your flash.
+minWidth:Number (optional) - Minimum desired width (px) for your flash. (default value = value used in swfobject)
+minHeight:Number (optional) - Minimum desired height (px) for your flash. (default value = value used in swfobject)
 maxWidth:Number (optional) - Maximum desired width (px) or 'null'.
 maxHeight:Number (optional) - Maximum desired height (px) or 'null'.
 horizontalCentered:Boolean (optional) - sets if the flash is centered horizontally after reach max size, default value is true (boolean: true or false).
