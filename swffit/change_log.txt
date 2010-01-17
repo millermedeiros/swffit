@@ -1,0 +1,60 @@
+== swffit 2.3.1 (08/05/2009) ==
+
+  * fixed conflict between swffit and FF3.5
+
+== swffit 2.3 (06/15/2009) ==
+
+  * added new methods 'showScrollH()' and 'showScrollV()'
+  * changed minimum size to optional
+  * fixed bug with swfobject 2.2 and static publishing
+  * improved source code comments
+  * updated the AS classes
+  * some code optimizations
+
+== swffit 2.2 (05/12/2009) ==
+
+  * fixed conflict between swfaddress 2.3 and IE8
+
+== swffit 2.1 (01/19/2009) ==
+
+  * added methods `configure()`, `startFit()` and `getValueOf()`
+  * added AS2 and AS3 classes to help dynamic flash resizing
+  * improved code structure
+
+== swffit 2.0 (10/18/2008) ==
+
+  * changed all the code structure to avoid conflicts with other libraries/scripts
+  * added methods `stopFit()`, `addResizeEvent()` and `removeResizeEvent()`
+
+== swffit 1.0 (03/27/2008) ==
+
+  * changed name from FitFlash to swffit
+  * added support to swfobject 2.0 and removed support to swfobject 1.5
+
+== FitFlash 2.5 (01/23/2008) ==
+
+  * fixed a bug that made flash files don't load sometimes on safari (mac)
+
+== FitFlash 2.4 (11/21/2007) ==
+
+  * added option to center flash movie after reaching maximum size
+
+== FitFlash 2.3 (10/29/2007) ==
+
+  * added maximum size
+
+== FitFlash 2.2 (09/26/2007) ==
+
+  * added functionality to change flash minimum size just calling 'FitFlash()' method again
+
+== FitFlash 2.1 (09/23/2007) ==
+
+  * removed the need of extra css to make FitFlash work
+
+== FitFlash 2.0 (09/22/2007) ==
+
+  * initial public release
+
+== FitFlash 1.0 (07/25/2006) ==
+
+  * initial version (private)

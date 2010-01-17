@@ -1,5 +1,5 @@
 /**
-*	swffit v2.3 (06/15/2009) <http://swffit.millermedeiros.com/>
+*	swffit v2.3.1 (08/05/2009) <http://swffit.millermedeiros.com/>
 *	Copyright (c) 2009 Miller Medeiros <http://www.millermedeiros.com/>
 *	This software is released under the MIT License <http://www.opensource.org/licenses/mit-license.php>
 *
@@ -98,7 +98,7 @@ var swffit = function(){
 		st += (IE)? '; overflow:hidden' : ''; //fix IE8
 		swfobject.createCSS("#"+_t, st);
 		_ft = doc.getElementById(_t);
-		_ft = (FF && /object/.test(_ft.innerHTML))? doc.getElementById(_t).getElementsByTagName('object')[0] : _ft; //required for static publishing on Firefox
+		_ft = (_ft != UNDEF && FF && /object/.test(_ft.innerHTML))? doc.getElementById(_t).getElementsByTagName('object')[0] : _ft; //required for static publishing on Firefox
 		_ow = _ft.width;
 		_oh = _ft.height;
 		_mw = (_mw)? _mw : _ow;
@@ -241,7 +241,8 @@ var swffit = function(){
 		}
 	}
 	/**
-	 * Show scrollbar
+	 * Show/Hide scrollbar 
+	 * ALERT: it will make flash file reload!!
 	 * @param {Boolean} s Show
 	 * @param {Boolean} v Is Vertical
 	 * @private
