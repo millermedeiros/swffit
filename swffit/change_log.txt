@@ -1,15 +1,13 @@
-<<<<<<< HEAD
-=======
+
 == swffit 2.4b (01/18/2009) ==
 
   * added new methods `getScrollTop()` and `getScrollLeft()`
-  * fixed resize issue on Safari 4.0.4 on Mac OS 10.6 (#5)
+  * fixed resize issue on Safari 4.0.4 on Mac OS 10.6 ([http://code.google.com/p/swffit/issues/detail?id=5&can=1 #5])
 
->>>>>>> iss5
 == swffit 2.3.3 (11/23/2009) ==
 
   * better window size detection
-  * fixed bug on FF3.6b that makes scrollbar appear after clicking with the right button (#4)
+  * fixed bug on FF3.6b that makes scrollbar appear after clicking with the right button ([http://code.google.com/p/swffit/issues/detail?id=4&can=1 #4])
 
 == swffit 2.3.2 (09/11/2009) ==
 
@@ -17,7 +15,7 @@
 
 == swffit 2.3.1 (08/05/2009) ==
 
-  * fixed conflict between swffit and FF3.5 (#1)
+  * fixed conflict between swffit and FF3.5 ([http://code.google.com/p/swffit/issues/detail?id=1&can=1 #1])
 
 == swffit 2.3 (06/15/2009) ==
 
