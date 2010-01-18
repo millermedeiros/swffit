@@ -1,4 +1,4 @@
-== swffit 2.3.3 (11/11/2009) ==
+== swffit 2.3.3 (11/23/2009) ==
 
   * better window size detection
   * fixed bug on FF3.6b that makes scrollbar appear after clicking with the right button

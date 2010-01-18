@@ -1,10 +1,7 @@
 /**
-*	swffit v2.3.3 (11/11/2009) <http://swffit.millermedeiros.com/>
+*	swffit v2.3.3 (11/23/2009) <http://swffit.millermedeiros.com/>
 *	Copyright (c) 2009 Miller Medeiros <http://www.millermedeiros.com/>
 *	This software is released under the MIT License <http://www.opensource.org/licenses/mit-license.php>
-*
-* 	swffit is used to resize flash to 100% wid/hei when the browser window is greater than the swf
-*	minimum size and to resize swf to the minimum size when browser window is smaller than the minimum size.
 *
 *	@requires swfobject 2.1 or higher <http://code.google.com/p/swfobject>
 */
@@ -16,19 +13,19 @@ var swffit = function(){
 		WK = /webkit/.test(AGENT),
 		IE = /msie/.test(AGENT) && !win.opera,
 		FF = /firefox/.test(AGENT) && !win.opera,
-		UNDEF = "undefined",
-		_ft,
-		_re,
-		_t,
-		_mw,
-		_mh,
-		_xw,
-		_xh,
-		_hc,
-		_vc,
-		_ow,
-		_oh;
-	swfobject.createCSS('object', 'position:absolute; outline:none'); //outiline none fixes bug on FF3.6b
+		UNDEF = 'undefined',
+		_ft, //{Element} object element (flash movie)
+		_re, //{Boolean} has resize event listener
+		_t, //{String} object id
+		_mw, //{int} min width
+		_mh, //{int} min height
+		_xw, //{int} max width
+		_xh, //{int} max height
+		_hc, //{Boolean} horizontal centered
+		_vc, //{Boolean} vertical centered
+		_ow, //{int} object width
+		_oh; //{int} object height
+	swfobject.createCSS('object', 'position:absolute; outline:none'); //outline none fixes bug #4 (FF3.6b)
 	/**
 	* Set the object that will be resized and configure the desired size
 	* @param {String} t Flash ID
@@ -94,7 +91,7 @@ var swffit = function(){
 		doc.body.style.margin = doc.body.style.padding = 0;
 		var st = 'width:100%; height:100%';
 		st += (IE)? '; overflow:hidden' : ''; //fix IE8
-		swfobject.createCSS("#"+_t, st);
+		swfobject.createCSS('#'+_t, st);
 		_ft = doc.getElementById(_t);
 		_ft = (_ft != UNDEF && FF && /object/.test(_ft.innerHTML))? doc.getElementById(_t).getElementsByTagName('object')[0] : _ft; //required for static publishing on Firefox
 		_ow = _ft.width;
@@ -160,7 +157,7 @@ var swffit = function(){
 	* @private
 	*/
 	function setWidth(w){
-		var v = (isNaN(w))? w : w+"px";
+		var v = (isNaN(w))? w : w+'px';
 		setStyle('width', v);
 	}
 	/**
@@ -169,7 +166,7 @@ var swffit = function(){
 	* @private
 	*/
 	function setHeight(h){
-		var v = (isNaN(h))? h : h+"px";
+		var v = (isNaN(h))? h : h+'px';
 		setStyle('height', v);
 	}
 	/**
