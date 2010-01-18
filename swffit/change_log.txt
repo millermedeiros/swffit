@@ -1,7 +1,11 @@
-== swffit 2.3.3 (11/11/2009) ==
+== swffit 2.4b (01/18/2009) ==
+
+  * fixed resize issue on Safari 4.0.4 on Mac OS 10.6 (#5)
+
+== swffit 2.3.3 (11/23/2009) ==
 
   * better window size detection
-  * fixed bug on FF3.6b that makes scrollbar appear after clicking with the right button
+  * fixed bug on FF3.6b that makes scrollbar appear after clicking with the right button (#4)
 
 == swffit 2.3.2 (09/11/2009) ==
 
@@ -9,7 +13,7 @@
 
 == swffit 2.3.1 (08/05/2009) ==
 
-  * fixed conflict between swffit and FF3.5
+  * fixed conflict between swffit and FF3.5 (#1)
 
 == swffit 2.3 (06/15/2009) ==
 

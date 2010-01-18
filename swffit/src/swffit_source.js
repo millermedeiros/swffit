@@ -1,10 +1,7 @@
 /**
-*	swffit v2.3.3 (11/11/2009) <http://swffit.millermedeiros.com/>
-*	Copyright (c) 2009 Miller Medeiros <http://www.millermedeiros.com/>
+*	swffit v2.4 beta (2010/01/18) <http://swffit.millermedeiros.com/>
+*	Copyright (c) 2010 Miller Medeiros <http://www.millermedeiros.com/>
 *	This software is released under the MIT License <http://www.opensource.org/licenses/mit-license.php>
-*
-* 	swffit is used to resize flash to 100% wid/hei when the browser window is greater than the swf
-*	minimum size and to resize swf to the minimum size when browser window is smaller than the minimum size.
 *
 *	@requires swfobject 2.1 or higher <http://code.google.com/p/swfobject>
 */
@@ -138,7 +135,10 @@ var swffit = function(){
 	 * @private
 	 */
 	function forceRedraw(){
-		if(WK){ html.focus(); }
+		if(WK){
+			_ft.style.paddingBottom = '1px'; //fixes issue #5
+			_ft.style.paddingBottom = '0';
+		}
 	}
 	/**
 	 * Add/Remove resize event listeners (Based on Peter-Paul Koch solution: http://www.quirksmode.org/js/eventSimple.html)
