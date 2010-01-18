@@ -278,6 +278,18 @@ var swffit = function(){
 		},
 		showScrollV: function(){
 			controlScroll(1,1);
+		},
+		/**
+		* @returns {int} Document Scroll Top
+		*/
+		getScrollTop: function(){
+			return doc.body.scrollTop ? doc.body.scrollTop : (win.pageYOffset ? win.pageYOffset : (doc.body.parentElement ? doc.body.parentElement.scrollTop : 0));
+		},
+		/**
+		* @returns {int} Document Scroll Left
+		*/
+		getScrollLeft: function(){
+			return doc.body.scrollLeft ? doc.body.scrollLeft : (win.pageXOffset ? win.pageXOffset : (doc.body.parentElement ? doc.body.parentElement.scrollLeft : 0));
 		}
 	};
 }();

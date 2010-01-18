@@ -1,5 +1,5 @@
 ---------------------------------------------------------------------
-//      README SWFFIT v2.3 (http://swffit.millermedeiros.com)      //
+//      README SWFFIT v2.4 (http://swffit.millermedeiros.com)      //
 //   swffit is (c) 2009 Miller Medeiros (www.millermedeiros.com)   //
 ---------------------------------------------------------------------
 
@@ -8,7 +8,7 @@ swffit is a smart script that resizes your flash automatically if
 your browser window size is smaller or greater than your flash minimum
 desired size keeping it accessible independent of screen resolution.
 
-
+git st
 
 //---- WHAT IT DOES? ----//
 
@@ -154,6 +154,27 @@ return:* - Desired Property Value
 --
 Example: swffit.getValueOf('minHei');  //returns flash movie Minimum Height
 
+
+
+/*** swffit.getScrollTop ***/
+
+Return Document Scroll Top
+--
+swffit.getScrollTop();
+--
+return:int - Number of pixels to the top of the document
+--
+
+
+
+/*** swffit.getScrollLeft ***/
+
+Return Document Scroll Left
+--
+swffit.getScrollLeft();
+--
+return:int - Number of pixels to the left of the document
+--
 
 
 //---- TROUBLESHOOTING ----//

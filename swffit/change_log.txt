@@ -2,6 +2,7 @@
 =======
 == swffit 2.4b (01/18/2009) ==
 
+  * added new methods `getScrollTop()` and `getScrollLeft()`
   * fixed resize issue on Safari 4.0.4 on Mac OS 10.6 (#5)
 
 >>>>>>> iss5
@@ -20,7 +21,7 @@
 
 == swffit 2.3 (06/15/2009) ==
 
-  * added new methods 'showScrollH()' and 'showScrollV()'
+  * added new methods `showScrollH()` and `showScrollV()`
   * changed minimum size to optional
   * fixed bug with swfobject 2.2 and static publishing
   * improved source code comments
