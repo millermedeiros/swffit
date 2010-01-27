@@ -5,7 +5,7 @@
 */
 (function(){
 	
-	//--- Local ---//
+	//======= Local =======//
 	
 	var win = window,
 		doc = document,
@@ -23,7 +23,10 @@
 	//- CSS2 standards compliant browsers -//
 	
 	
+	
 	//- Old browsers -//
+	
+	
 	
 	//- All browsers -//
 	
@@ -31,21 +34,63 @@
 	 * Set initial parameters (only called once)
 	 */
 	function setupPage(){
-		if(!html.style.overflowX){ html.style.overflowX = 'auto'; }
-		if(!html.style.overflowY){ html.style.overflowY = 'auto'; }
+		//ensure it doesn't overwrite `showScrollH`
+		if(!html.style.overflowX){ 
+			html.style.overflowX = 'auto';
+		}
+		//ensure it doesn't overwrite `showScrollV` 
+		if(!html.style.overflowY){
+			html.style.overflowY = 'auto';
+		}
 		html.style.height = doc.body.style.height = '100%';
 		doc.body.style.margin = doc.body.style.padding = 0;
+		createStyleSheet('object{outline:none}'); //Fix FF3.6 bug (#4)
 	}
 	
-	//--- Public API ---//
+	/**
+	 * Create stylesheet
+	 * @param {String} cssText	CSS rules.
+	 */
+	function createStyleSheet(cssText){
+		var st = doc.createElement('style'),
+			head = doc.getElementsByTagName['head'][0];
+		st.type = 'text/css';
+		try{
+			st.appendChild(doc.createTextNode(cssText));
+		}catch(ex){
+			st.styleSheet.cssText = cssText; //IE
+		}
+		head.appendChild(st);
+	}
+	
+	
+	//======= Public API =======//
 	
 	this.swffit = {
+		
 		//TODO: implement
 		fit : null,
+		
 		//TODO: implement
-		configure : null,
+		configure : function(o){
+			_minWid = ('minWid' in o)? o.minWid : _minWid;
+			_minHei = ('minHei' in o)? o.minHei : _minHei;
+			_maxWid = ('maxWid' in o)? o.maxWid : _maxWid;
+			_maxHei = ('maxhei' in o)? o.maxhei : _maxHei;
+			_hCenter = ('hCenter' in o)? o.hCenter : _hCenter;
+			_vCenter = ('vCenter' in o)? o.vCenter : _vCenter;
+			//XXX: change the way target works
+			if(o.target && o.taget != _targetID){
+				_targetID = o.target;
+				//TODO:add DOM load event
+			}else{
+				//swffit.startFit();
+			}
+		},
+		
 		//TODO: implement
 		startFit : null,
+		
 		//TODO: implement
 		stopFit : null,
 		
@@ -55,32 +100,32 @@
 		* @return {Mixed} Desired Property Value
 		*/
 		getValueOf : function(propertyName){
-			var p;
+			var v;
 			//way more verbose than previous version but avoid creating a new Object every time you need to access 1 property.
 			switch(propertyName){
 				case 'target':
-					p = _targetID;
+					v = _targetID;
 					break;
 				case 'minWid':
-					p = _minWid;
+					v = _minWid;
 					break;
 				case 'minHei':
-					p = _minHei;
+					v = _minHei;
 					break;
 				case 'maxWid':
-					p = _maxWid;
+					v = _maxWid;
 					break;
 				case 'maxHei':
-					p = _maxHei;
+					v = _maxHei;
 					break;
 				case 'hCenter':
-					p = _hCenter;
+					v = _hCenter;
 					break;
 				case 'vCenter':
-					p = _vCenter;
+					v = _vCenter;
 					break;
 			}
-			return p;
+			return v;
 		},
 		
 		/**
