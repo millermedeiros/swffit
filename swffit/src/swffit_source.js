@@ -11,40 +11,32 @@
 		doc = document,
 		html = doc.getElementsByTagName('html')[0],
 		UNDEF = "undefined",
-		_flashTarget,
-		_targetID,
-		_minWid,
-		_minHei,
-		_maxWid,
-		_maxHei,
-		_hCenter,
-		_vCenter;
-		
-	//- CSS2 standards compliant browsers -//
-	
-	
-	
-	//- Old browsers -//
-	
-	
-	
-	//- All browsers -//
+		_initialized = false, //{Boolean} if initial configs was completed
+		_flashTarget, //{Element} object element (flash movie)
+		_targetID, //{String} object id
+		_minWid = 1, //{int} minimum width
+		_minHei = 1, //{int} minimum height
+		_maxWid = null, //{int} maximum width
+		_maxHei = null, //{int} maximum height
+		_hCenter = true, //{Boolean} horizontal centered
+		_vCenter = true; //{Boolean} vertical centered
 	
 	/**
-	 * Set initial parameters (only called once)
+	 * Configure HTML page and default properties (only called once)
 	 */
 	function setupPage(){
 		//ensure it doesn't overwrite `showScrollH`
-		if(!html.style.overflowX){ 
+		if(!html.style.overflowX){
 			html.style.overflowX = 'auto';
 		}
-		//ensure it doesn't overwrite `showScrollV` 
+		//ensure it doesn't overwrite `showScrollV`
 		if(!html.style.overflowY){
 			html.style.overflowY = 'auto';
 		}
 		html.style.height = doc.body.style.height = '100%';
 		doc.body.style.margin = doc.body.style.padding = 0;
 		createStyleSheet('object{outline:none}'); //Fix FF3.6 bug (#4)
+		_initialized = true;
 	}
 	
 	/**
@@ -53,7 +45,7 @@
 	 */
 	function createStyleSheet(cssText){
 		var st = doc.createElement('style'),
-			head = doc.getElementsByTagName['head'][0];
+			head = doc.getElementsByTagName('head')[0];
 		st.type = 'text/css';
 		try{
 			st.appendChild(doc.createTextNode(cssText));
@@ -69,7 +61,19 @@
 	this.swffit = {
 		
 		//TODO: implement
-		fit : null,
+		/**
+		* Initialize swffit and set desired properties (alias for swffit.configure).
+		* @param {String} [target] Flash ID (Optional - Default first flash object)
+		* @param {Number} [minWid] Minimum Width (Optional - Default value is the flash object width)
+		* @param {Number} [minHei] Minimum Height (Optional - Default value is the flash object height)
+		* @param {Number} [maxWid] Maximum Width (Optional - Default value is null)
+		* @param {Number} [maxHei] Maximum Height (Optional - Default value is null)
+		* @param {Boolean} [hCenter] Horizontal Centered (Optional - Default value is true)
+		* @param {Boolean} [vCenter] Vertical Centered (Optional - Default value is true)
+		*/
+		fit : function(){
+			
+		},
 		
 		//TODO: implement
 		configure : function(o){
@@ -79,20 +83,34 @@
 			_maxHei = ('maxhei' in o)? o.maxhei : _maxHei;
 			_hCenter = ('hCenter' in o)? o.hCenter : _hCenter;
 			_vCenter = ('vCenter' in o)? o.vCenter : _vCenter;
-			//XXX: change the way target works
-			if(o.target && o.taget != _targetID){
-				_targetID = o.target;
-				//TODO:add DOM load event
-			}else{
-				//swffit.startFit();
+			if(!_initialized){
+				MM.event.addDOMReady(setupPage);
+			}
+			//TODO: change the way target works
+			if('target' in o){
+				if(o.target != _targetID) {
+					_targetID = o.target;
+					_flashTarget = doc.getElementById(_targetID); //TODO: check static publishing on FF
+				}
+			}else if(_targetID === UNDEF){ //get first object if no target was specified
+				_flashTarget = doc.getElementsByTagName('object')[0]; //TODO: check static publishing on FF
+				_targetID = _flashTarget.id;
+			}
+			MM.event.addDOMReady(swffit.startFit);
+		},
+		
+		//TODO: implement
+		startFit : function(){
+			
+			if(_flashTarget){
+				
 			}
 		},
 		
 		//TODO: implement
-		startFit : null,
-		
-		//TODO: implement
-		stopFit : null,
+		stopFit : function(){
+			
+		},
 		
 		/**
 		* Return the value of the desired property
