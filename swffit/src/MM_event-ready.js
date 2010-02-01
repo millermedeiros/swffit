@@ -2,7 +2,7 @@
  * MM.event - DOM Ready
  * - Add DOM Ready Event Listener.
  * @author Miller Medeiros <http://www.millermedeiros.com/>
- * @version 0.2 (2010/01/15)
+ * @version 0.2.1 (2010/02/01)
  * Released under the MIT License <http://www.opensource.org/licenses/mit-license.php>
  */
 (function(){
@@ -21,11 +21,11 @@
 	MM.event.addDOMReady = function(fn){
 		if(!_isDOMReady){
 			_bindReady();
-			_onReadyFns.push(fn);
+			_onReadyFns[_onReadyFns.length] = fn; //faster than push()
 		}else{
 			fn();
 		}
-	};
+	}
 	
 	/**
 	 * Calls all the functions that were registered to the DOM Ready Event (not a real Event Dispatcher)
@@ -66,7 +66,25 @@
 	 * @private
 	 */
 	function _onLoad(){
-		window.detachEvent('onload', arguments.callee);
+		if(window.detachEvent){
+			window.detachEvent('onload', arguments.callee);
+		}else{
+			window.removeEventListener('load', arguments.callee, false);
+		}
+		_dispatchDOMReady();
+	}
+	
+	/**
+	 * Hack based on Diego Perini solution: http://javascript.nwbox.com/IEContentLoaded/
+	 * @private
+	 */
+	function _scrollCheck(){
+		try{
+			document.documentElement.doScroll('left');
+		}catch(error){
+			setTimeout(arguments.callee, 1);
+			return;
+		}
 		_dispatchDOMReady();
 	}
 	
@@ -88,27 +106,20 @@
 		
 		if(document.addEventListener){ //Mozilla, Opera and WebKit
 			document.addEventListener('DOMContentLoaded', _onDOMContentLoaded, false);
+			window.addEventListener('load', _onLoad, false);//fallback
 		}else if(document.attachEvent){ //IE
 			
 			document.attachEvent('onreadystatechange', _onReadyStateChange); //ensure firing before onload. (also works for iframes)
 			window.attachEvent('onload', _onLoad); //fallback to make sure DOMReadyEvent is always dispatched.
 			
-			//continually check to see if the document is an iframe.
-			var toplevel = false;
+			//If IE and not a frame continually check if it's ready.
+			var topLevel = false;
 			try{
-				toplevel = (window.frameElement == null);
+				topLevel = (window.frameElement == null);
 			}catch(e){}
 			
-			//If IE and not an iframe continually check if it's ready.
 			if(document.documentElement.doScroll && topLevel){
-				//hack based on Diego Perini solution: http://javascript.nwbox.com/IEContentLoaded/
-				try{
-					document.documentElement.doScroll('left');
-				}catch(error){
-					setTimeout(arguments.callee, 1);
-					return;
-				}
-				_dispatchDOMReady();
+				_scrollCheck();
 			}
 			
 		}

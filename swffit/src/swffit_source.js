@@ -14,10 +14,10 @@
 		_initialized = false, //{Boolean} if initial configs was completed
 		_flashTarget, //{Element} object element (flash movie)
 		_targetID, //{String} object id
-		_minWid = 1, //{int} minimum width
-		_minHei = 1, //{int} minimum height
-		_maxWid = null, //{int} maximum width
-		_maxHei = null, //{int} maximum height
+		_minWid, //{int} minimum width
+		_minHei, //{int} minimum height
+		_maxWid, //{int} maximum width
+		_maxHei, //{int} maximum height
 		_hCenter = true, //{Boolean} horizontal centered
 		_vCenter = true; //{Boolean} vertical centered
 	
@@ -35,7 +35,12 @@
 		}
 		html.style.height = doc.body.style.height = '100%';
 		doc.body.style.margin = doc.body.style.padding = 0;
-		createStyleSheet('object{outline:none}'); //Fix FF3.6 bug (#4)
+		/*
+		 * "display:block" Removes unnecessary margin around flash
+		 * "ouline:none" Fix FF3.6 bug of showing scrollbar after giving focus to flash movie
+		 * "overflow:hidden" Force IE8 to redraw flash after rescale
+		 */
+		createStyleSheet('object{display:block; outline:none; overflow:hidden}'); 
 		_initialized = true;
 	}
 	
@@ -71,38 +76,43 @@
 		* @param {Boolean} [hCenter] Horizontal Centered (Optional - Default value is true)
 		* @param {Boolean} [vCenter] Vertical Centered (Optional - Default value is true)
 		*/
-		fit : function(){
+		fit : function(target, minWid, minHei, maxWid, maxHei, hCenter, vCenter){
 			
 		},
 		
 		//TODO: implement
 		configure : function(o){
+			_targetID = ('target' in o)? o.target : _targetID;
 			_minWid = ('minWid' in o)? o.minWid : _minWid;
 			_minHei = ('minHei' in o)? o.minHei : _minHei;
 			_maxWid = ('maxWid' in o)? o.maxWid : _maxWid;
-			_maxHei = ('maxhei' in o)? o.maxhei : _maxHei;
+			_maxHei = ('maxHei' in o)? o.maxHei : _maxHei;
 			_hCenter = ('hCenter' in o)? o.hCenter : _hCenter;
 			_vCenter = ('vCenter' in o)? o.vCenter : _vCenter;
 			if(!_initialized){
-				MM.event.addDOMReady(setupPage);
+				swffit.addDOMReady(setupPage);
 			}
-			//TODO: change the way target works
-			if('target' in o){
-				if(o.target != _targetID) {
-					_targetID = o.target;
-					_flashTarget = doc.getElementById(_targetID); //TODO: check static publishing on FF
-				}
-			}else if(_targetID === UNDEF){ //get first object if no target was specified
-				_flashTarget = doc.getElementsByTagName('object')[0]; //TODO: check static publishing on FF
-				_targetID = _flashTarget.id;
-			}
-			MM.event.addDOMReady(swffit.startFit);
+			swffit.addDOMReady(swffit.startFit);
 		},
 		
 		//TODO: implement
 		startFit : function(){
-			
-			if(_flashTarget){
+			if(_targetID === UNDEF){ //get first object if no target was specified
+				_flashTarget = doc.getElementsByTagName('object')[0]; //TODO: check static publishing on FF
+				_targetID = _flashTarget.id;
+			}else{
+				_flashTarget = doc.getElementById(_targetID); //TODO: check static publishing on FF
+			}
+			//TODO: add lazy binding and implement fallback if browser doesn't support min-width/min-height
+			var st = _flashTarget.style; //local storage for better performance 
+			//didn't used style.cssText because the user may set some property that we don't want to overwrite
+			st.width = st.height = '100%';
+			st.minWidth = (_minWid)? _minWid + 'px' : null;
+			st.minHeight = (_minHei)? _minHei + 'px' : null;
+			st.maxWidth = (_maxWid)? _maxWid + 'px' : null;
+			st.maxHeight = (_maxHei)? _maxHei + 'px' : null;
+			//TODO: centering
+			if(_hCenter || _vCenter){
 				
 			}
 		},
@@ -202,7 +212,7 @@
 		* Adds Event Listener
 		* @param {Element} elm Element.
 		* @param {String} e Event type.
-		* @param {Function} fn Handler.
+		* @param {Function} fn Event Handler.
 		*/
 		addEventListener : function(elm, e, fn){
 			MM.event.addListener(elm, e, fn);
@@ -212,7 +222,7 @@
 		* Removes Event Listener
 		* @param {Element} elm Element.
 		* @param {String} e Event type.
-		* @param {Function} fn Handler.
+		* @param {Function} fn Event Handler.
 		*/
 		removeEventListener: function(elm, e, fn){
 			MM.event.removeListener(elm, e, fn);
@@ -220,7 +230,7 @@
 		
 		/**
 		 * Adds scroll Event listener
-		 * @param {Function} fn	Handler
+		 * @param {Function} fn	Event Handler
 		 */
 		addScrollEvent : function(fn){
 			MM.event.addListener('window', 'scroll', fn);
@@ -228,10 +238,18 @@
 		
 		/**
 		 * Removes scroll Event listener
-		 * @param {Function} fn	Handler
+		 * @param {Function} fn	Event Handler
 		 */
 		removeScrollEvent : function(fn){
 			MM.event.removeListener('window', 'scroll', fn);
+		},
+		
+		/**
+		 * Add DOM Ready Event Listener
+		 * @param {Function} fn	Event Handler
+		 */
+		addDOMReady : function(fn){
+			MM.event.addDOMReady(fn);
 		}
 		
 	};
